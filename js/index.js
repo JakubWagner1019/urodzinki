@@ -53,6 +53,9 @@ function main() {
         let li = document.createElement("li");
         let currentPerson = personData[i];
         let nextBDay = getNextBDay(today, currentPerson.birthday);
+        if (nextBDay.daysUntil === 69) {
+            document.getElementById("video69").style.display = "block";
+        }
         if (nextBDay.daysUntil === 0) {
             if (currentPerson.name === "Marcina") {
                 document.getElementById("marcinVideo").style.display = "block";
