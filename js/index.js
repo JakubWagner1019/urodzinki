@@ -3,39 +3,53 @@ let personData = [
     //w javascripcie okazuje sie ze w dacie miesiac to wartosc 0-11, nie 1-12 ....
     {
         name: "Marka",
-        birthday: new Date(1997, 0, 27) // 27 Jan 1997
+        birthday: new Date("1997-01-27") // 27 Jan 1997
     },
     {
         name: "Marcina",
-        birthday: new Date(1996, 11, 24) // 24 Dec 1996
+        birthday: new Date("1996-12-24") // 24 Dec 1996
     },
     {
         name: "Rafała",
-        birthday: new Date(1996, 8, 10) // 10 Sep 1996
+        birthday: new Date("1996-9-10") // 10 Sep 1996
     },
     {
         name: "Patryka",
-        birthday: new Date(1996, 2, 7) // 7 Mar 1996
+        birthday: new Date("1996-3-7") // 7 Mar 1996
     },
     {
         name: "Kuby",
-        birthday: new Date(1996, 10, 25) // 25 Nov 1996
+        birthday: new Date("1996-11-25") // 25 Nov 1996
     },
     {
         name: "Matiego",
-        birthday: new Date(1996, 1, 2) // 2 Feb 1996
+        birthday: new Date("1996-2-2") // 2 Feb 1996
     },
 ]
 
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// a and b are javascript Date objects
+function dateDiffInDays(a, b) {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
 function getNextBDay(today, birthday) {
+    console.log("Today" + today);
+    console.log("Birthday" + birthday);
     let thisYearBirthday;
     if (birthday.getMonth() > today.getMonth() || (birthday.getMonth() === today.getMonth() && birthday.getDate() >= today.getDate())) {
         thisYearBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
     } else {
         thisYearBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
     }
-    let millisecDiff = thisYearBirthday.getTime() - today.getTime();
-    let daysDiff = Math.floor(millisecDiff / (1000 * 60 * 60 * 24));
+    // let millisecDiff = thisYearBirthday.getTime() - today.getTime();
+    // let daysDiff = Math.ceil(millisecDiff / (1000 * 60 * 60 * 24));
+    let daysDiff = dateDiffInDays(today, thisYearBirthday);
     let yearDiff = thisYearBirthday.getFullYear() - birthday.getFullYear();
     return {
         daysUntil: daysDiff,
@@ -44,11 +58,11 @@ function getNextBDay(today, birthday) {
 }
 
 function main() {
-    let now = new Date(Date.now());
-    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let today = new Date(Date.now());
+    //let today = new Date(2021, 11, 24);
     personData.sort(function (a, b) {
         return getNextBDay(today, a.birthday).daysUntil - getNextBDay(today, b.birthday).daysUntil;
-    })
+    });
     for (let i = 0; i < personData.length; i++) {
         let li = document.createElement("li");
         let currentPerson = personData[i];
